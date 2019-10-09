@@ -1,15 +1,14 @@
 #include <stdio.h>
 #include <stdlib.h>
-//#include <conio.h>
+#include <conio.h>
 #include <string.h>
-//#include <curses.h>
 
 #define Q_contatos 5
 
 
 typedef struct{
     char nome[50];
-    char numero[2][15];
+    char numero[2][20];
     char endereco[60];
     char email[30];
     int on;
@@ -33,7 +32,7 @@ void add(contact_list *Contact_List){
     int i = 0;
 
     while(1){
-        system("clear");
+        system("cls");
 
         (*Contact_List).contactsalreadyadded = 0;
         
@@ -43,7 +42,7 @@ void add(contact_list *Contact_List){
         }
 
         if((*Contact_List).contactsalreadyadded >= Q_contatos){
-            system("clear");
+            system("cls");
             printf("-----------------------------------\n");
             printf("|          NOVO CONTATO:          |\n");
             printf("|---------------------------------|\n");
@@ -53,20 +52,21 @@ void add(contact_list *Contact_List){
         }
 
         if((*Contact_List).contato[i].on == 0){
-            system("clear");
+            system("cls");
             printf("-----------------------------------\n");
             printf("|          NOVO CONTATO:          |\n");
             printf("|---------------------------------|\n");
             printf("Nome: \n");
-            scanf(" %[^\n]s", (*Contact_List).contato[i].nome);
+            setbuf(stdin, NULL);
+            fgets((*Contact_List).contato[i].nome, 50, stdin);
             printf("Numero (1): \n");
-            scanf(" %s", (*Contact_List).contato[i].numero[0]);
+            fgets((*Contact_List).contato[i].numero[0], 20, stdin);
             printf("Numero (2): \n");
-            scanf(" %s", (*Contact_List).contato[i].numero[1]);
+            fgets((*Contact_List).contato[i].numero[1], 20, stdin);
             printf("Endereco: \n");
-            scanf(" %[^\n]s", (*Contact_List).contato[i].endereco);
+            fgets((*Contact_List).contato[i].endereco, 60, stdin);
             printf("Email: \n");
-            scanf(" %s", (*Contact_List).contato[i].email);
+            fgets((*Contact_List).contato[i].email,50, stdin);
             (*Contact_List).contato[i].on = 1;
             ++i;
                      
@@ -84,25 +84,30 @@ void add(contact_list *Contact_List){
 
 
 void editar(contact_list *Contact_List){
-    system("clear");
+    system("cls");
 }
 
 
 void excluir(contact_list *Contact_List){
-    system("clear");
+    system("cls");
 }
 
 
 int listar(contact_list *Contact_List){
     
-    char exit;
+    //VARIAVEIS USADAS NA FUNCAO 
+    char exitlistar;
+    char exitinformacoes;
     char menor[50];
     int contador = 0;
+    int selecao;
 
-    while(exit != 'v' || exit != 'V')
+    //LOOPING PRINCIPAL DA FUNCAO
+    while(exitlistar != 'v' || exitlistar != 'V')
     {
-        system("clear");
+        system("cls");
 
+        //LOOPING ORDENANDO OS CONTATOS POR ORDEM ALFABETICA
         while(contador <= Contact_List -> contactsalreadyadded)
         {
             for(int j = 0; j < Contact_List -> contactsalreadyadded; j++)
@@ -118,20 +123,57 @@ int listar(contact_list *Contact_List){
             contador++;
         }
 
+        //PRINTANDO A LISTA DE CONTATOS
         for (int i = 0; i <= Contact_List -> contactsalreadyadded; i++)
         {
             printf("%d - ", i+1);
             printf("%s\n",Contact_List -> contato[i].nome);
         }
 
+        //SELECIONANDO CONTATO
+        printf("Digite o numero do contato: ");
+        scanf("%d", &selecao);
+        system("cls");
+
+        //PRINTANDO INFORMACOES DO CONTATO
+        while (exitinformacoes != 's' || exitinformacoes != 'S')
+        {
+            
+            printf("Nome: %s\n", Contact_List -> contato[selecao-1].nome);
+
+            for(int i = 0; i < 2; i++)
+            {
+                printf("Telefone %d: %s\n", i+1, Contact_List -> contato[selecao-1].numero[i]);
+            }
+                
+                
+            printf("Endereco: %s\n", Contact_List -> contato[selecao-1].endereco);
+            printf("Email: %s\n", Contact_List -> contato[selecao-1].email);
+            
+            
+            printf(" --------------------------\n");
+            printf("  S - Sair das informacoes\n");
+            printf(" --------------------------\n");
+
+            setbuf(stdin, NULL);
+            scanf("%c", &exitinformacoes);
+
+            //CONDICAO PARA VOLTAR AO MENU PRINCIPAL
+            if(exitinformacoes == 's' || exitinformacoes == 'S')
+                return 0;
+        }
+        
+
+        //PRINT DA OPCAO DE VOLTAR AO MENU 
         printf(" --------------------\n");
         printf("  V - Voltar ao menu\n");
         printf(" --------------------\n");
-
-        setbuf(stdin, NULL);
-        scanf("%c", &exit);
         
-        switch (exit)
+        //RECEBENDO OPCAO DE RETORNAR AO MENU
+        setbuf(stdin, NULL);
+        scanf("%c", &exitlistar);
+    
+        switch (exitlistar)
         {
             case 'V':
                 return 0;
@@ -143,7 +185,7 @@ int listar(contact_list *Contact_List){
         
             default:
                 printf("Opcao invalida, por favor digite novamente: ");
-                scanf("%c", &exit);
+                scanf("%c", &exitlistar);
                 break;
         }
     }
@@ -151,7 +193,7 @@ int listar(contact_list *Contact_List){
 
 
 void buscar(contact_list *Contact_List){
-    system("clear");
+    system("cls");
 
 }
 
@@ -160,7 +202,7 @@ void menu(contact_list *Contact_List){
     int option;
 
     while(1){
-        system("clear");
+        system("cls");
         printf("-----------------------------------\n");
         printf("|       LISTA DE CONTATOS:        |\n");
         printf("|                                 |\n");
