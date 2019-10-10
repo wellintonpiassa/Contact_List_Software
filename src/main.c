@@ -18,12 +18,16 @@ typedef struct{
 typedef struct{
     contatos contato[Q_contatos];
     int contactsalreadyadded;
+    bool listFunctionControlVar;
 }contact_list;
 
 
 void init_contacts(contact_list *Contact_List){
+
     for(int i = 0; i<Q_contatos; ++i)
         (*Contact_List).contato[i].on = 0;
+
+    (*Contact_List).listFunctionControlVar = false;
 }
 
 
@@ -131,10 +135,11 @@ int listar(contact_list *Contact_List){
         }
 
         //SELECIONANDO CONTATO
+        
         printf("Digite o numero do contato: ");
         scanf("%d", &selecao);
         system("cls");
-
+        
         //PRINTANDO INFORMACOES DO CONTATO
         while (exitinformacoes != 's' || exitinformacoes != 'S')
         {
@@ -231,6 +236,7 @@ void menu(contact_list *Contact_List){
                 break;
             case 4:
                 listar(Contact_List);
+                (*Contact_List).listFunctionControlVar = true;
                 break;
             case 5:
                 buscar(Contact_List);
