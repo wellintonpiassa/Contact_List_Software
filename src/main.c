@@ -22,8 +22,11 @@ typedef struct{
 
 
 void init_contacts(contact_list *Contact_List){
-    for(int i = 0; i<Q_contatos; ++i)
+    for(int i = 0; i<Q_contatos; ++i){
         (*Contact_List).contato[i].on = 0;
+    }
+
+    Contact_List -> contactsalreadyadded = 0;
 }
 
 
@@ -108,6 +111,9 @@ int listar(contact_list *Contact_List){
         system("clear");
 
     // ESPACO PARA COLOCAR CONDICAO DE MOSTRAR QUE NAO HA CONTATOS CADASTRADOS
+
+        if (Contact_List -> contactsalreadyadded > 0)
+        {
         
             //LOOPING ORDENANDO OS CONTATOS POR ORDEM ALFABETICA
             while(contador <= Contact_List -> contactsalreadyadded)
@@ -152,6 +158,7 @@ int listar(contact_list *Contact_List){
                 printf("%d - ", i+1);
                 printf("%s\n",Contact_List -> contato[i].nome);
             }
+
             printf("-----------------------------------------------\n");
             printf(" 1 - Escolher um contato    2 - Voltar ao menu \n");
             printf("-----------------------------------------------\n");
@@ -221,7 +228,17 @@ int listar(contact_list *Contact_List){
 
             }
         }
-    
+
+        else
+        {
+            char escolher[1];
+            printf("Ainda nao ha contatos cadastrados\n");
+            printf("Pressione algo para voltar ao menu...\n");
+            setbuf(stdin, NULL);
+            getchar();
+            return 0;
+        }
+    }
 }
 
 
