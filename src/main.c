@@ -2,6 +2,7 @@
 #include <stdlib.h>
 //#include <conio.h>
 #include <string.h>
+#include <stdbool.h>
 
 #define Q_contatos 5
 
@@ -18,6 +19,7 @@ typedef struct{
 typedef struct{
     contatos contato[Q_contatos];
     int contactsalreadyadded;
+    bool listFunctionControlVar;
 }contact_list;
 
 
@@ -27,6 +29,8 @@ void init_contacts(contact_list *Contact_List){
     }
 
     Contact_List -> contactsalreadyadded = 0;
+
+    (*Contact_List).listFunctionControlVar = false;
 }
 
 
@@ -281,6 +285,7 @@ void menu(contact_list *Contact_List){
                 break;
             case 4:
                 listar(Contact_List);
+                (*Contact_List).listFunctionControlVar = true;
                 break;
             case 5:
                 buscar(Contact_List);
