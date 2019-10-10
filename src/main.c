@@ -1,6 +1,6 @@
 #include <stdio.h>
 #include <stdlib.h>
-#include <conio.h>
+//#include <conio.h>
 #include <string.h>
 
 #define Q_contatos 5
@@ -32,7 +32,7 @@ void add(contact_list *Contact_List){
     int i = 0;
 
     while(1){
-        system("cls");
+        system("clear");
 
         (*Contact_List).contactsalreadyadded = 0;
         
@@ -42,7 +42,7 @@ void add(contact_list *Contact_List){
         }
 
         if((*Contact_List).contactsalreadyadded >= Q_contatos){
-            system("cls");
+            system("clear");
             printf("-----------------------------------\n");
             printf("|          NOVO CONTATO:          |\n");
             printf("|---------------------------------|\n");
@@ -52,7 +52,7 @@ void add(contact_list *Contact_List){
         }
 
         if((*Contact_List).contato[i].on == 0){
-            system("cls");
+            system("clear");
             printf("-----------------------------------\n");
             printf("|          NOVO CONTATO:          |\n");
             printf("|---------------------------------|\n");
@@ -84,116 +84,149 @@ void add(contact_list *Contact_List){
 
 
 void editar(contact_list *Contact_List){
-    system("cls");
+    system("clear");
 }
 
 
 void excluir(contact_list *Contact_List){
-    system("cls");
+    system("clear");
 }
 
 
 int listar(contact_list *Contact_List){
     
     //VARIAVEIS USADAS NA FUNCAO 
-    char exitlistar;
-    char exitinformacoes;
+    //char exitlistar;
+    char exit;
     char menor[50];
     int contador = 0;
-    int selecao;
+    int selecao = 0;
 
     //LOOPING PRINCIPAL DA FUNCAO
-    while(exitlistar != 'v' || exitlistar != 'V')
+    while(selecao != 2)
     {
-        system("cls");
+        system("clear");
 
-        //LOOPING ORDENANDO OS CONTATOS POR ORDEM ALFABETICA
-        while(contador <= Contact_List -> contactsalreadyadded)
-        {
-            for(int j = 0; j < Contact_List -> contactsalreadyadded; j++)
+    // ESPACO PARA COLOCAR CONDICAO DE MOSTRAR QUE NAO HA CONTATOS CADASTRADOS
+        
+            //LOOPING ORDENANDO OS CONTATOS POR ORDEM ALFABETICA
+            while(contador <= Contact_List -> contactsalreadyadded)
             {
-                if (strcmp (Contact_List -> contato[j].nome, Contact_List -> contato[j+1].nome) > 0)
+                for(int j = 0; j < Contact_List -> contactsalreadyadded; j++)
                 {
-                    strcpy(menor, Contact_List -> contato[j].nome);
-                    strcpy(Contact_List -> contato[j].nome, Contact_List -> contato[j+1].nome);
-                    strcpy(Contact_List -> contato[j+1].nome, menor);
+                    if (strcmp (Contact_List -> contato[j].nome, Contact_List -> contato[j+1].nome) > 0)
+                    {   
+                        //ALTERANDO A POSICAO DOS NOMES 
+                        strcpy(menor, Contact_List -> contato[j].nome);
+                        strcpy(Contact_List -> contato[j].nome, Contact_List -> contato[j+1].nome);
+                        strcpy(Contact_List -> contato[j+1].nome, menor);
+
+                        //ALTERANDO A POSICAO DO PRIMEIRO NUMERO
+                        strcpy(menor, Contact_List -> contato[j].numero[0]);
+                        strcpy(Contact_List -> contato[j].numero[0], Contact_List -> contato[j+1].numero[0]);
+                        strcpy(Contact_List -> contato[j+1].numero[0], menor);
+
+                        //ALTERANDO A POSICAO DO SEGUNDO NUMERO 
+                        strcpy(menor, Contact_List -> contato[j].numero[1]);
+                        strcpy(Contact_List -> contato[j].numero[1], Contact_List -> contato[j+1].numero[1]);
+                        strcpy(Contact_List -> contato[j+1].numero[1], menor);
+
+                        //ALTERANDO A POSICAO DO ENDERECO
+                        strcpy(menor, Contact_List -> contato[j].endereco);
+                        strcpy(Contact_List -> contato[j].endereco, Contact_List -> contato[j+1].endereco);
+                        strcpy(Contact_List -> contato[j+1].endereco, menor);
+
+                        //ALTERANDO A POSICAO DO EMAIL
+                        strcpy(menor, Contact_List -> contato[j].email);
+                        strcpy(Contact_List -> contato[j].email, Contact_List -> contato[j+1].email);
+                        strcpy(Contact_List -> contato[j+1].email, menor);    
+                    }
                 }
+
+                contador++;
             }
 
-            contador++;
-        }
-
-        //PRINTANDO A LISTA DE CONTATOS
-        for (int i = 0; i <= Contact_List -> contactsalreadyadded; i++)
-        {
-            printf("%d - ", i+1);
-            printf("%s\n",Contact_List -> contato[i].nome);
-        }
-
-        //SELECIONANDO CONTATO
-        printf("Digite o numero do contato: ");
-        scanf("%d", &selecao);
-        system("cls");
-
-        //PRINTANDO INFORMACOES DO CONTATO
-        while (exitinformacoes != 's' || exitinformacoes != 'S')
-        {
-            
-            printf("Nome: %s\n", Contact_List -> contato[selecao-1].nome);
-
-            for(int i = 0; i < 2; i++)
+            //PRINTANDO A LISTA DE CONTATOS
+            for (int i = 0; i <= Contact_List -> contactsalreadyadded; i++)
             {
-                printf("Telefone %d: %s\n", i+1, Contact_List -> contato[selecao-1].numero[i]);
+                printf("%d - ", i+1);
+                printf("%s\n",Contact_List -> contato[i].nome);
             }
-                
-                
-            printf("Endereco: %s\n", Contact_List -> contato[selecao-1].endereco);
-            printf("Email: %s\n", Contact_List -> contato[selecao-1].email);
-            
-            
-            printf(" --------------------------\n");
-            printf("  S - Sair das informacoes\n");
-            printf(" --------------------------\n");
+            printf("-----------------------------------------------\n");
+            printf(" 1 - Escolher um contato    2 - Voltar ao menu \n");
+            printf("-----------------------------------------------\n");
+            scanf("%d",&selecao);
 
-            setbuf(stdin, NULL);
-            scanf("%c", &exitinformacoes);
+            switch (selecao)
+            {   
+                case 1:
+                    //SELECIONANDO CONTATO
+                    printf("Digite o numero do contato: ");
+                    
+                    //VALIDACAO DE SELECAO 
+                    do
+                    {
+                        scanf("%d", &selecao);
 
-            //CONDICAO PARA VOLTAR AO MENU PRINCIPAL
-            if(exitinformacoes == 's' || exitinformacoes == 'S')
-                return 0;
+                        if(selecao > Contact_List -> contactsalreadyadded + 1 || selecao <= 0)
+                            printf("\nOpcao Invalida, por favor digite novamente: ");
+                        
+                    }while(selecao > Contact_List -> contactsalreadyadded + 1 || selecao <= 0);
+
+                    system("clear");
+
+                    //PRINTANDO INFORMACOES DO CONTATO
+                    while (exit != 's' || exit != 'S')
+                    {
+                        
+                        printf("Nome: %s\n", Contact_List -> contato[selecao-1].nome);
+
+                        for(int i = 0; i < 2; i++)
+                        {
+                            printf("Telefone %d: %s\n", i+1, Contact_List -> contato[selecao-1].numero[i]);
+                        }
+                            
+                            
+                        printf("Endereco: %s\n", Contact_List -> contato[selecao-1].endereco);
+                        printf("Email: %s\n", Contact_List -> contato[selecao-1].email);
+                        
+                        
+                        printf(" --------------------------\n");
+                        printf("  S - Sair das informacoes\n");
+                        printf(" --------------------------\n");
+
+                        setbuf(stdin, NULL);
+                        scanf("%c", &exit);
+
+                        //CONDICAO PARA VOLTAR AO MENU PRINCIPAL
+                        if(exit == 's' || exit == 'S')
+                            return 0;
+                    }
+                    break;
+
+                case 2:
+                    return 0;
+                    break;
+
+                default:
+                    do
+                    {
+                        scanf("%d", &selecao);
+
+                        if(selecao > Contact_List -> contactsalreadyadded + 1 || selecao <= 0)
+                            printf("\nOpcao Invalida, por favor digite novamente: ");
+                        
+                    }while(selecao > Contact_List -> contactsalreadyadded + 1 || selecao <= 0);
+                    break;
+
+            }
         }
-        
-
-        //PRINT DA OPCAO DE VOLTAR AO MENU 
-        printf(" --------------------\n");
-        printf("  V - Voltar ao menu\n");
-        printf(" --------------------\n");
-        
-        //RECEBENDO OPCAO DE RETORNAR AO MENU
-        setbuf(stdin, NULL);
-        scanf("%c", &exitlistar);
     
-        switch (exitlistar)
-        {
-            case 'V':
-                return 0;
-                break;
-
-            case 'v':
-                return 0;
-                break;
-        
-            default:
-                printf("Opcao invalida, por favor digite novamente: ");
-                scanf("%c", &exitlistar);
-                break;
-        }
-    }
 }
 
 
 void buscar(contact_list *Contact_List){
-    system("cls");
+    system("clear");
 
 }
 
@@ -202,7 +235,7 @@ void menu(contact_list *Contact_List){
     int option;
 
     while(1){
-        system("cls");
+        system("clear");
         printf("-----------------------------------\n");
         printf("|       LISTA DE CONTATOS:        |\n");
         printf("|                                 |\n");
