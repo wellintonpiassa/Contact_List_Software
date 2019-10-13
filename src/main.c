@@ -385,8 +385,52 @@ int ordenar(contact_list *Contact_List){
 
 
 void buscar(contact_list *Contact_List){
-    system("cls");
+    int op = 0;
+    char busca[50];
+    contact_list resultados[Q_contatos]; 
 
+    while(1) {
+        system("cls");
+        printf("-------------------------------------------------\n");
+        printf("|                    BUSCAR:                    |\n");
+        printf("-------------------------------------------------\n");
+        init_contacts(resultados);
+
+        fgets(busca, 50, stdin);
+        printf("Buscando por: ");
+        scanf(" %[^\n]s", busca);
+
+        for(int i = 0; i < Contact_List->contactsalreadyadded; i++) {
+            if(strstr(Contact_List->contato[i].nome, busca) != NULL) {
+                int index = resultados->contactsalreadyadded;
+                resultados->contato[index] = Contact_List->contato[i];
+                resultados->contactsalreadyadded++;
+            }
+        }
+        
+        if(resultados->contactsalreadyadded == 0)
+            printf("Nenhum resultado foi encontrado para %s!\n", resultados->contactsalreadyadded, busca);
+        else if(resultados->contactsalreadyadded == 1)
+            printf("Foi encontrado %d resultado para %s!\n", resultados->contactsalreadyadded, busca);
+        else
+            printf("Foram encontrados %d resultados para %s!\n", resultados->contactsalreadyadded, busca);
+
+        for(int i = 0; i < resultados->contactsalreadyadded; i++) {
+            printf("-------------------------------------------------\n");
+            printf("%d:\n", i+1);
+            printf("    Nome: %s", resultados->contato[i].nome);
+            printf("    Numero (1): %s", resultados->contato[i].numero[0]);
+            printf("    Numero (2): %s", resultados->contato[i].numero[1]);
+            printf("    Endereco: %s", resultados->contato[i].endereco);
+            printf("    Email: %s", resultados->contato[i].email);
+        }
+        printf("-------------------------------------------------\n");
+        printf("  1 - Buscar novamente    2 - Voltar ao menu \n");
+        printf("-------------------------------------------------\n");
+        scanf("%d", &op);
+        if(op == 2)
+            break;
+    }
 }
 
 
