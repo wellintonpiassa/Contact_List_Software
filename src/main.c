@@ -43,46 +43,48 @@ int listar(contact_list *Contact_List){
 
         if (Contact_List -> contactsalreadyadded > 0)
         {
-        
-            //LOOPING ORDENANDO OS CONTATOS POR ORDEM ALFABETICA
-            while(contador <= Contact_List -> contactsalreadyadded)
-            {
-                for(int j = 0; j < Contact_List -> contactsalreadyadded; j++)
+            // Ordena a lista apenas quando mais de um contato está registrado
+            if (Contact_List -> contactsalreadyadded > 1) {
+                //LOOPING ORDENANDO OS CONTATOS POR ORDEM ALFABETICA
+                while(contador < Contact_List -> contactsalreadyadded)
                 {
-                    if (strcmp (Contact_List -> contato[j].nome, Contact_List -> contato[j+1].nome) > 0)
-                    {   
-                        //ALTERANDO A POSICAO DOS NOMES 
-                        strcpy(menor, Contact_List -> contato[j].nome);
-                        strcpy(Contact_List -> contato[j].nome, Contact_List -> contato[j+1].nome);
-                        strcpy(Contact_List -> contato[j+1].nome, menor);
+                    for(int j = 0; j < Contact_List -> contactsalreadyadded; j++)
+                    {
+                        if (strcmp (Contact_List -> contato[j].nome, Contact_List -> contato[j+1].nome) > 0)
+                        {   
+                            //ALTERANDO A POSICAO DOS NOMES 
+                            strcpy(menor, Contact_List -> contato[j].nome);
+                            strcpy(Contact_List -> contato[j].nome, Contact_List -> contato[j+1].nome);
+                            strcpy(Contact_List -> contato[j+1].nome, menor);
 
-                        //ALTERANDO A POSICAO DO PRIMEIRO NUMERO
-                        strcpy(menor, Contact_List -> contato[j].numero[0]);
-                        strcpy(Contact_List -> contato[j].numero[0], Contact_List -> contato[j+1].numero[0]);
-                        strcpy(Contact_List -> contato[j+1].numero[0], menor);
+                            //ALTERANDO A POSICAO DO PRIMEIRO NUMERO
+                            strcpy(menor, Contact_List -> contato[j].numero[0]);
+                            strcpy(Contact_List -> contato[j].numero[0], Contact_List -> contato[j+1].numero[0]);
+                            strcpy(Contact_List -> contato[j+1].numero[0], menor);
 
-                        //ALTERANDO A POSICAO DO SEGUNDO NUMERO 
-                        strcpy(menor, Contact_List -> contato[j].numero[1]);
-                        strcpy(Contact_List -> contato[j].numero[1], Contact_List -> contato[j+1].numero[1]);
-                        strcpy(Contact_List -> contato[j+1].numero[1], menor);
+                            //ALTERANDO A POSICAO DO SEGUNDO NUMERO 
+                            strcpy(menor, Contact_List -> contato[j].numero[1]);
+                            strcpy(Contact_List -> contato[j].numero[1], Contact_List -> contato[j+1].numero[1]);
+                            strcpy(Contact_List -> contato[j+1].numero[1], menor);
 
-                        //ALTERANDO A POSICAO DO ENDERECO
-                        strcpy(menor, Contact_List -> contato[j].endereco);
-                        strcpy(Contact_List -> contato[j].endereco, Contact_List -> contato[j+1].endereco);
-                        strcpy(Contact_List -> contato[j+1].endereco, menor);
+                            //ALTERANDO A POSICAO DO ENDERECO
+                            strcpy(menor, Contact_List -> contato[j].endereco);
+                            strcpy(Contact_List -> contato[j].endereco, Contact_List -> contato[j+1].endereco);
+                            strcpy(Contact_List -> contato[j+1].endereco, menor);
 
-                        //ALTERANDO A POSICAO DO EMAIL
-                        strcpy(menor, Contact_List -> contato[j].email);
-                        strcpy(Contact_List -> contato[j].email, Contact_List -> contato[j+1].email);
-                        strcpy(Contact_List -> contato[j+1].email, menor);    
+                            //ALTERANDO A POSICAO DO EMAIL
+                            strcpy(menor, Contact_List -> contato[j].email);
+                            strcpy(Contact_List -> contato[j].email, Contact_List -> contato[j+1].email);
+                            strcpy(Contact_List -> contato[j+1].email, menor);    
+                        }
                     }
-                }
 
-                contador++;
+                    contador++;
+                }
             }
 
             //PRINTANDO A LISTA DE CONTATOS
-            for (int i = 0; i <= Contact_List -> contactsalreadyadded; i++)
+            for (int i = 0; i < Contact_List -> contactsalreadyadded; i++)
             {
                 printf("%d - ", i+1);
                 printf("%s\n",Contact_List -> contato[i].nome);
@@ -115,13 +117,6 @@ void add(contact_list *Contact_List){
     while(1){
         system("cls");
 
-        (*Contact_List).contactsalreadyadded = 0;
-        
-        for(int k = 0; k<Q_contatos; ++k){
-            if((*Contact_List).contato[k].on == 1)
-                ++(*Contact_List).contactsalreadyadded;
-        }
-
         if((*Contact_List).contactsalreadyadded >= Q_contatos){
             system("cls");
             printf("------------------------------------------------\n");
@@ -148,8 +143,10 @@ void add(contact_list *Contact_List){
             fgets((*Contact_List).contato[i].endereco, 60, stdin);
             printf("Email: \n");
             fgets((*Contact_List).contato[i].email, 30, stdin);
-            (*Contact_List).contato[i].on = 1;
+            Contact_List->contato[i].on = 1;
+
             ++i;
+            ++(*Contact_List).contactsalreadyadded;
                      
 
             printf("\n\nDeseja adicionar outro contato?\n1 - Sim.\n2 - Nao.\n");
