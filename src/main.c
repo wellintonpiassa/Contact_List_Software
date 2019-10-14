@@ -4,7 +4,7 @@
 #include <string.h>
 #include <stdbool.h>
 
-#define Q_contatos 5
+#define Q_contatos 3
 
 
 typedef struct{
@@ -84,8 +84,8 @@ int listar(contact_list *Contact_List){
             //PRINTANDO A LISTA DE CONTATOS
             for (int i = 0; i <= Contact_List -> contactsalreadyadded; i++)
             {
-                printf("%d - ", i+1);
-                printf("%s\n",Contact_List -> contato[i].nome);
+                printf(" %d - ", i+1);
+                printf("%s\n\n",Contact_List -> contato[i].nome);
             }
 
             printf(" -----------------------------------------------\n");
@@ -101,7 +101,7 @@ int listar(contact_list *Contact_List){
             printf("Pressione uma tecla para voltar ao menu...\n");
             setbuf(stdin, NULL);
             getchar();
-            return 0;
+            return -2;
         }
 
 
@@ -139,21 +139,29 @@ void add(contact_list *Contact_List){
             printf("|----------------------------------------------|\n");
             printf("Nome: \n");
             setbuf(stdin, NULL);
-            fgets((*Contact_List).contato[i].nome, 50, stdin);
+            scanf(" %[^\n]s", &(*Contact_List).contato[i].nome);
             printf("Numero (1): \n");
-            fgets((*Contact_List).contato[i].numero[0], 20, stdin);
+            scanf(" %[^\n]s", &(*Contact_List).contato[i].numero[0]);
             printf("Numero (2): \n");
-            fgets((*Contact_List).contato[i].numero[1], 20, stdin);
+            scanf(" %[^\n]s", &(*Contact_List).contato[i].numero[1]);
             printf("Endereco: \n");
-            fgets((*Contact_List).contato[i].endereco, 60, stdin);
+            scanf(" %[^\n]s", &(*Contact_List).contato[i].endereco);
             printf("Email: \n");
-            fgets((*Contact_List).contato[i].email, 30, stdin);
+            scanf(" %[^\n]s", &(*Contact_List).contato[i].email);
             (*Contact_List).contato[i].on = 1;
             ++i;
                      
 
             printf("\n\nDeseja adicionar outro contato?\n1 - Sim.\n2 - Nao.\n");
-            scanf("%d", &adding);
+
+            do{   
+                scanf("%d", &adding);
+
+                if(adding > 2 || adding <= 0)
+                    printf("\nOpcao Invalida, por favor digite novamente: ");
+                        
+            }while(adding > 2 || adding <= 0);
+            
 
             if(adding == 2)
                 break;
@@ -171,7 +179,7 @@ int editar(contact_list *Contact_List){
     printf("|-----------------------------------------------|\n");
 
     int selecao = listar(Contact_List);
-    if(selecao != 0){
+    if(selecao != -2){
         while(1){
             switch (selecao){
                 case 1:
@@ -182,22 +190,22 @@ int editar(contact_list *Contact_List){
                     do{
                         scanf("%d", &selecao);
 
-                        if(selecao > Contact_List -> contactsalreadyadded || selecao <= 0)
+                        if(selecao > Contact_List -> contactsalreadyadded + 1 || selecao <= 0)
                             printf("\nOpcao Invalida, por favor digite novamente: ");
                         
-                    }while(selecao > Contact_List -> contactsalreadyadded || selecao <= 0);
+                    }while(selecao > Contact_List -> contactsalreadyadded + 1 || selecao <= 0);
 
                     while(1){
                         system("cls");
                         printf("-------------------------------------------------\n");
                         printf("|                    EDITAR:                    |\n");
                         printf("|-----------------------------------------------|\n");
-                        printf(" 1 - Nome: %s\n", (*Contact_List).contato[selecao-1].nome);
-                        printf(" 2 - Numero (1): %s\n", (*Contact_List).contato[selecao-1].numero[0]);
-                        printf(" 3 - Numero (2): %s\n", (*Contact_List).contato[selecao-1].numero[1]);
-                        printf(" 4 - Endereco: %s\n", (*Contact_List).contato[selecao-1].endereco);
-                        printf(" 5 - Email: %s\n", (*Contact_List).contato[selecao-1].email);
-                        printf(" 0 - Voltar ao Menu.");
+                        printf(" 1 - Nome: %s\n\n", (*Contact_List).contato[selecao-1].nome);
+                        printf(" 2 - Numero (1): %s\n\n", (*Contact_List).contato[selecao-1].numero[0]);
+                        printf(" 3 - Numero (2): %s\n\n", (*Contact_List).contato[selecao-1].numero[1]);
+                        printf(" 4 - Endereco: %s\n\n", (*Contact_List).contato[selecao-1].endereco);
+                        printf(" 5 - Email: %s\n\n", (*Contact_List).contato[selecao-1].email);
+                        printf(" 0 - Voltar ao Menu.\n\n");
 
                         int selecao2;
 
@@ -221,7 +229,7 @@ int editar(contact_list *Contact_List){
                             switch(selecao2){
                                 case 1:
                                     printf("Novo Nome: \n");
-                                    scanf(" %s", &(*Contact_List).contato[selecao-1].nome);
+                                    scanf(" %[^\n]s", &(*Contact_List).contato[selecao-1].nome);
                                     varDcontrole = 1;
                                     printf("\nPressione uma tecla para voltar.\n");
                                     setbuf(stdin, NULL);
@@ -229,7 +237,7 @@ int editar(contact_list *Contact_List){
                                     break;
                                 case 2:
                                     printf("Novo Numero (1): \n");
-                                    scanf(" %s", &(*Contact_List).contato[selecao-1].numero[0]);
+                                    scanf(" %[^\n]s", &(*Contact_List).contato[selecao-1].numero[0]);
                                     varDcontrole = 1;
                                     printf("\nPressione uma tecla para voltar.\n");
                                     setbuf(stdin, NULL);
@@ -237,7 +245,7 @@ int editar(contact_list *Contact_List){
                                     break;
                                 case 3:
                                     printf("Novo Numero (2): \n");
-                                    scanf(" %s", &(*Contact_List).contato[selecao-1].numero[1]);
+                                    scanf(" %[^\n]s", &(*Contact_List).contato[selecao-1].numero[1]);
                                     varDcontrole = 1;
                                     printf("\nPressione uma tecla para voltar.\n");
                                     setbuf(stdin, NULL);
@@ -245,7 +253,7 @@ int editar(contact_list *Contact_List){
                                     break;
                                 case 4:
                                     printf("Novo Endereco: \n");
-                                    scanf(" %s", &(*Contact_List).contato[selecao-1].endereco);
+                                    scanf(" %[^\n]s", &(*Contact_List).contato[selecao-1].endereco);
                                     varDcontrole = 1;
                                     printf("\nPressione uma tecla para voltar.\n");
                                     setbuf(stdin, NULL);
@@ -253,7 +261,7 @@ int editar(contact_list *Contact_List){
                                     break;
                                 case 5:
                                     printf("Novo Email: \n");
-                                    scanf(" %s", &(*Contact_List).contato[selecao-1].email);
+                                    scanf(" %[^\n]s", &(*Contact_List).contato[selecao-1].email);
                                     varDcontrole = 1;
                                     printf("\nPressione uma tecla para voltar.\n");
                                     setbuf(stdin, NULL);
@@ -311,7 +319,7 @@ int ordenar(contact_list *Contact_List){
     printf("|-----------------------------------------------|\n");
 
     int selecao = listar(Contact_List);
-        if(selecao != 0){
+        if(selecao != -2){
             while(1){
                 switch (selecao)
                 {   
@@ -340,16 +348,16 @@ int ordenar(contact_list *Contact_List){
                         while (exit != 's' || exit != 'S')
                         {
                         
-                            printf("Nome: %s\n", Contact_List -> contato[selecao-1].nome);
+                            printf("Nome: %s\n\n", Contact_List -> contato[selecao-1].nome);
 
                             for(int i = 0; i < 2; i++)
                             {
-                                printf("Telefone %d: %s\n", i+1, Contact_List -> contato[selecao-1].numero[i]);
+                                printf("Telefone %d: %s\n\n", i+1, Contact_List -> contato[selecao-1].numero[i]);
                             }
                             
                             
-                            printf("Endereco: %s\n", Contact_List -> contato[selecao-1].endereco);
-                            printf("Email: %s\n", Contact_List -> contato[selecao-1].email);
+                            printf("Endereco: %s\n\n", Contact_List -> contato[selecao-1].endereco);
+                            printf("Email: %s\n\n", Contact_List -> contato[selecao-1].email);
                         
                             printf("         ----------------------------\n");
                             printf("         | S - Sair das informacoes |\n");
@@ -372,12 +380,12 @@ int ordenar(contact_list *Contact_List){
                         do
                         {
 
-                            if(selecao > Contact_List -> contactsalreadyadded + 1 || selecao <= 0)
+                            if(selecao > 2 || selecao <= 0)
                                 printf("\nOpcao Invalida, por favor digite novamente: ");
 
                             scanf("%d", &selecao);
                         
-                        }while(selecao > Contact_List -> contactsalreadyadded + 1 || selecao <= 0);
+                        }while(selecao > 2 || selecao <= 0);
                         break;
 
                 }
