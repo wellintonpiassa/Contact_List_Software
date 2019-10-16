@@ -349,13 +349,20 @@ int excluir(contact_list *Contact_List){
 
                     }while(selecao2 != 's' && selecao2 != 'S' && selecao2 != 'n' && selecao2 != 'N');
 
-                    Contact_List -> contato[selecao-1].on = 0;
+                    // Sobrescreve o elemento atual com o próximo
+                    for (int i = selecao-1; i < Contact_List->contactsalreadyadded; i++) {
+                        Contact_List->contato[i] = Contact_List->contato[i+1];
+                    }
+
+                    // Desliga o ultimo elemento
+                    int index = Contact_List->contactsalreadyadded-1;
+                    Contact_List->contato[index].on = 0;
                     
-                    if(Contact_List -> contato[selecao-1].on == 0)
-                        printf("Contato apagado com sucesso!\n");
+                    printf("Contato apagado com sucesso!\n");
 
                     printf("\nPressiona uma tecla para voltar ao menu...");
                     setbuf(stdin, NULL);
+                    getchar();
                     getchar();
                     return 0;
                     break;
