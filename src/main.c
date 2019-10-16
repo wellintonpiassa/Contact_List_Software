@@ -507,11 +507,11 @@ void buscar(contact_list *Contact_List){
         for(int i = 0; i < resultados->contactsalreadyadded; i++) {
             printf("-------------------------------------------------\n");
             printf("%d:\n", i+1);
-            printf("    Nome: %s", resultados->contato[i].nome);
-            printf("    Numero (1): %s", resultados->contato[i].numero[0]);
-            printf("    Numero (2): %s", resultados->contato[i].numero[1]);
-            printf("    Endereco: %s", resultados->contato[i].endereco);
-            printf("    Email: %s", resultados->contato[i].email);
+            printf("    Nome: %s\n", resultados->contato[i].nome);
+            printf("    Numero (1): %s\n", resultados->contato[i].numero[0]);
+            printf("    Numero (2): %s\n", resultados->contato[i].numero[1]);
+            printf("    Endereco: %s\n", resultados->contato[i].endereco);
+            printf("    Email: %s\n", resultados->contato[i].email);
         }
         printf("-------------------------------------------------\n");
         printf("  1 - Buscar novamente    2 - Voltar ao menu \n");
