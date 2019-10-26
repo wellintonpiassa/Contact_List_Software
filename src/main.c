@@ -4,7 +4,7 @@
 #include <string.h>
 #include <stdbool.h>
 
-#define Q_contatos 5
+#define Q_contatos 50
 
 
 typedef struct{
@@ -19,6 +19,7 @@ typedef struct{
 typedef struct{
     contatos contato[Q_contatos];
     int contactsalreadyadded;
+    FILE *bkpcontacts;
 }contact_list;
 
 
@@ -34,7 +35,7 @@ void init_contacts(contact_list *Contact_List){
 int listar(contact_list *Contact_List){
 
     //VARIAVEIS USADAS NA FUNCAO 
-    
+    contact_list contact;
     char menor[50];
     int contador = 0;
     int selecao = 0;
@@ -48,7 +49,7 @@ int listar(contact_list *Contact_List){
                 {
                     for(int i = 0; i < Contact_List -> contactsalreadyadded; i++)
                     {
-                        if(Contact_List -> contato[i].on != 0)
+                        if(Contact_List -> contato[i].on != 0 && i < Contact_List ->contactsalreadyadded -1)
                         {
                             if (strcmp (Contact_List -> contato[i].nome, Contact_List -> contato[i+1].nome) > 0)
                             {   
@@ -355,7 +356,7 @@ int excluir(contact_list *Contact_List){
                     }
 
                     // Desliga o ultimo elemento
-                    int index = Contact_List->contactsalreadyadded-1;
+                    int index = Contact_List->contactsalreadyadded - 1;
                     Contact_List->contato[index].on = 0;
                     
                     printf("Contato apagado com sucesso!\n");
