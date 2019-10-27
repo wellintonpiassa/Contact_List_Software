@@ -68,6 +68,8 @@ void savingData(contact_list *Contact_List, FILE *data){
         fwrite(&(*Contact_List).contato[i], sizeof(contatos), 1, data);
     }
 
+    fclose(data);
+
 }
 
 int listar(contact_list *Contact_List){
