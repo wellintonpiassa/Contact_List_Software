@@ -23,14 +23,52 @@ typedef struct{
 }contact_list;
 
 
-void init_contacts(contact_list *Contact_List){
-    for(int i = 0; i<Q_contatos; ++i){
-        (*Contact_List).contato[i].on = 0;
+void init_contacts(contact_list *Contact_List, FILE *data){
+    fseek(data, 0, SEEK_END);
+
+    int i;
+
+    long FileSize = ftell(data);
+
+    int contactSize = sizeof(contatos); 
+
+    Contact_List -> contactsalreadyadded = FileSize / contactSize;
+
+    if(Contact_List -> contactsalreadyadded > 0){
+
+        rewind(data);
+
+        for(i = 0; i < Contact_List -> contactsalreadyadded; ++i){
+            (*Contact_List).contato[i].on = 1;
+
+            fread(&(*Contact_List).contato[i], contactSize, 1, data);
+
+        }
+        
+
+        for(i = Contact_List -> contactsalreadyadded; i < Q_contatos; ++i)
+            (*Contact_List).contato[i].on = 0;
+
+    }else{
+        for(i = 0; i<Q_contatos; ++i)
+            (*Contact_List).contato[i].on = 0;
+        
     }
 
-    Contact_List -> contactsalreadyadded = 0;
+    fclose(data);
+    
 }
 
+
+void savingData(contact_list *Contact_List, FILE *data){
+
+    rewind(data);
+
+    for(int i = 0; i<(*Contact_List).contactsalreadyadded; ++i){
+        fwrite(&(*Contact_List).contato[i], sizeof(contatos), 1, data);
+    }
+
+}
 
 int listar(contact_list *Contact_List){
 
@@ -120,10 +158,10 @@ void add(contact_list *Contact_List){
     int i = 0;
 
     while(1){
-        system("clear");
+        system("cls");
 
         if((*Contact_List).contactsalreadyadded >= Q_contatos){
-            system("clear");
+            system("cls");
             printf("------------------------------------------------\n");
             printf("|                 NOVO CONTATO:                |\n");
             printf("|----------------------------------------------|\n");
@@ -133,7 +171,7 @@ void add(contact_list *Contact_List){
         }
 
         if((*Contact_List).contato[i].on == 0){
-            system("clear");
+            system("cls");
             printf("------------------------------------------------\n");
             printf("|                 NOVO CONTATO:                |\n");
             printf("|----------------------------------------------|\n");
@@ -174,7 +212,7 @@ void add(contact_list *Contact_List){
 
 
 int editar(contact_list *Contact_List){
-    system("clear");
+    system("cls");
     printf("-------------------------------------------------\n");
     printf("|                    EDITAR:                    |\n");
     printf("|-----------------------------------------------|\n");
@@ -197,7 +235,7 @@ int editar(contact_list *Contact_List){
                     }while(selecao > Contact_List -> contactsalreadyadded + 1 || selecao <= 0);
 
                     while(1){
-                        system("clear");
+                        system("cls");
                         printf("-------------------------------------------------\n");
                         printf("|                    EDITAR:                    |\n");
                         printf("|-----------------------------------------------|\n");
@@ -219,7 +257,7 @@ int editar(contact_list *Contact_List){
                         
                         }while(selecao2 > 5 || selecao2 < 0);
                         
-                        system("clear");
+                        system("cls");
                         printf("-------------------------------------------------\n");
                         printf("|                    EDITAR:                    |\n");
                         printf("|-----------------------------------------------|\n");
@@ -307,7 +345,7 @@ int editar(contact_list *Contact_List){
 
 
 int excluir(contact_list *Contact_List){
-    system("clear");
+    system("cls");
     printf("-------------------------------------------------\n");
     printf("|                    EXCLUIR:                   |\n");
     printf("|-----------------------------------------------|\n");
@@ -393,7 +431,7 @@ int excluir(contact_list *Contact_List){
     
 
 int ordenar(contact_list *Contact_List){
-    system("clear");
+    system("cls");
     printf("-------------------------------------------------\n");
     printf("|                    LISTAR:                    |\n");
     printf("|-----------------------------------------------|\n");
@@ -417,7 +455,7 @@ int ordenar(contact_list *Contact_List){
                         
                         }while(selecao > Contact_List -> contactsalreadyadded + 1 || selecao <= 0);
 
-                        system("clear");
+                        system("cls");
                         printf("-------------------------------------------------\n");
                         printf("|                    LISTAR:                    |\n");
                         printf("|-----------------------------------------------|\n");
@@ -474,17 +512,17 @@ int ordenar(contact_list *Contact_List){
 }
 
 
-void buscar(contact_list *Contact_List){
+void buscar(contact_list *Contact_List, FILE *data){
     int op = 0;
     char busca[50];
     contact_list resultados[Q_contatos]; 
 
     while(1) {
-        system("clear");
+        system("cls");
         printf("-------------------------------------------------\n");
         printf("|                    BUSCAR:                    |\n");
         printf("-------------------------------------------------\n");
-        init_contacts(resultados);
+        init_contacts(resultados, data);
 
         fgets(busca, 50, stdin);
         printf("Buscando por: ");
@@ -510,7 +548,7 @@ void buscar(contact_list *Contact_List){
             printf("%d:\n", i+1);
             printf("    Nome: %s\n", resultados->contato[i].nome);
             printf("    Numero (1): %s\n", resultados->contato[i].numero[0]);
-            printf("    Numero (2): %s\n", resultados->contato[i].numero[1]);
+            printf("    Numero (2): %s\n", resultados->contato[i].numero[1]);  
             printf("    Endereco: %s\n", resultados->contato[i].endereco);
             printf("    Email: %s\n", resultados->contato[i].email);
         }
@@ -524,11 +562,11 @@ void buscar(contact_list *Contact_List){
 }
 
 
-void menu(contact_list *Contact_List){
+void menu(contact_list *Contact_List, FILE *data){
     int option;
 
     while(1){
-        system("clear");
+        system("cls");
         printf("-----------------------------------\n");
         printf("|       LISTA DE CONTATOS:        |\n");
         printf("|                                 |\n");
@@ -559,7 +597,7 @@ void menu(contact_list *Contact_List){
                 ordenar(Contact_List);
                 break;
             case 5:
-                buscar(Contact_List);
+                buscar(Contact_List, data);
                 break;
             default:
                 printf("\nOpcao Invalida!\n");
@@ -572,12 +610,27 @@ void menu(contact_list *Contact_List){
 
 
 int main (void){
-
     contact_list Contact_List;
 
-    init_contacts(&Contact_List);
+    FILE *data;
 
-    menu(&Contact_List);
+    data = fopen("data.bin", "rb");
 
-    return 0;
+    if(data == NULL){
+        printf("Erro ao abrir o arquivo.\n");
+        return -1;
+    }else{
+
+        init_contacts(&Contact_List, data);
+
+        data = fopen("data.bin", "wb");
+        
+
+        menu(&Contact_List, data);
+       
+
+        savingData(&Contact_List, data);
+
+        return 0;
+    }
 }
